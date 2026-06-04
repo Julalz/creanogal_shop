@@ -1,0 +1,27 @@
+.productos-page {
+  padding-block: var(--space-section);
+  background: var(--color-off-white);
+}
+
+.productos-page__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.productos-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.productos-page__title {
+  font-size: var(--font-size-2xl);
+}
+
+.productos-page__intro {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  max-width: 40ch;
+  line-height: 1.6;
+}

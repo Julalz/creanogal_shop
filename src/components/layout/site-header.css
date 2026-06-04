@@ -1,0 +1,22 @@
+.site-head {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Home: header sobre el hero */
+body:has(.hero) .site-head {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+body:has(.hero) .top-bar,
+body:has(.hero) .site-header {
+  background: var(--bar-bg-overlay);
+  backdrop-filter: var(--bar-backdrop);
+  -webkit-backdrop-filter: var(--bar-backdrop);
+  border-bottom: none;
+}

@@ -1,0 +1,23 @@
+.quote-section {
+  text-align: center;
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-sm);
+}
+
+.quote-section__text {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: var(--font-weight-base);
+  color: var(--color-text);
+  max-width: 32ch;
+  margin-inline: auto;
+  line-height: 1.5;
+}
+
+.quote-section__author {
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}

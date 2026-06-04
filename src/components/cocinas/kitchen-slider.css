@@ -1,0 +1,130 @@
+.kitchen-slider {
+  position: relative;
+}
+
+.kitchen-slider__viewport {
+  overflow: hidden;
+  background: var(--color-dark);
+  border-radius: var(--radius-img);
+}
+
+.kitchen-slider__track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.kitchen-slide {
+  position: relative;
+  flex: 0 0 100%;
+  min-width: 0;
+  height: clamp(26rem, 64vh, 40rem);
+  display: flex;
+  align-items: flex-end;
+  color: var(--color-text-on-dark);
+}
+
+.kitchen-slide__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.kitchen-slide__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(10 10 10 / 0.85) 0%,
+    rgb(10 10 10 / 0.35) 50%,
+    rgb(10 10 10 / 0.15) 100%
+  );
+}
+
+.kitchen-slide__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-block: clamp(2rem, 5vw, 3.5rem);
+  max-width: 44rem;
+}
+
+.kitchen-slide__label {
+  display: block;
+  margin-bottom: var(--space-md);
+  color: var(--color-gold);
+}
+
+.kitchen-slide__title {
+  font-size: var(--font-size-2xl);
+  line-height: 1.1;
+  margin-bottom: var(--space-md);
+  max-width: 18ch;
+}
+
+.kitchen-slide__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted-on-dark);
+  line-height: 1.7;
+  max-width: 46ch;
+}
+
+.kitchen-slider__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.kitchen-slider__arrow {
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.kitchen-slider__arrow:hover {
+  background: var(--color-text);
+  color: var(--color-surface);
+  border-color: var(--color-text);
+}
+
+.kitchen-slider__dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.kitchen-slider__dot {
+  width: 2rem;
+  height: 2px;
+  padding: 0;
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.kitchen-slider__dot--active {
+  background: var(--color-gold);
+}
+
+@media (max-width: 768px) {
+  .kitchen-slide {
+    height: clamp(22rem, 70vh, 32rem);
+  }
+}

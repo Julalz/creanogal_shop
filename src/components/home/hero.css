@@ -1,0 +1,103 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: clamp(10rem, 32vh, 16rem);
+  background: var(--color-dark);
+  color: var(--color-text-on-dark);
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-dark);
+  background-image:
+    linear-gradient(
+      to top,
+      rgb(10 10 10 / 0.9) 0%,
+      rgb(10 10 10 / 0.45) 45%,
+      rgb(10 10 10 / 0.35) 100%
+    ),
+    url("/images/banners/hero2-grifo.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-block: 0;
+}
+
+.hero__counter {
+  position: absolute;
+  top: 50%;
+  right: clamp(1.25rem, 4vw, 3rem);
+  z-index: 2;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.hero__counter-num {
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-muted-on-dark);
+  transition: color 0.3s ease;
+}
+
+.hero__counter-num--active {
+  color: var(--color-gold);
+}
+
+.hero__counter-line {
+  width: 1px;
+  height: clamp(3rem, 10vh, 6rem);
+  background: linear-gradient(
+    to bottom,
+    var(--color-gold) 0%,
+    var(--color-gold) 35%,
+    rgb(255 255 255 / 0.25) 35%,
+    rgb(255 255 255 / 0.25) 100%
+  );
+}
+
+@media (max-width: 768px) {
+  .hero__counter {
+    display: none;
+  }
+}
+
+.hero__label {
+  display: block;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-muted-on-dark);
+}
+
+.hero__title {
+  font-size: var(--font-size-hero);
+  max-width: 14ch;
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted-on-dark);
+  letter-spacing: 0.04em;
+  max-width: 36ch;
+  margin-bottom: var(--space-xl);
+  line-height: 1.7;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}

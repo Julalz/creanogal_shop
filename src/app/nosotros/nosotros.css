@@ -1,0 +1,184 @@
+/* Hero de página (mismo patrón que Quooker) */
+.nosotros-hero {
+  padding-block: var(--space-section);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.nosotros-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+.nosotros-hero__brand {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  color: var(--color-accent);
+}
+
+.nosotros-hero__tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+}
+
+.nosotros-hero__title {
+  font-size: var(--font-size-hero);
+  line-height: 1.1;
+}
+
+.nosotros-hero__intro {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  margin-top: var(--space-md);
+}
+
+/* Intro */
+.nosotros-intro {
+  padding-block: var(--space-section);
+  background: var(--color-off-white);
+}
+
+.nosotros-intro__inner {
+  max-width: 42rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.nosotros-intro__text {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+/* Bloques filosofía / compromiso */
+.nosotros-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+  padding-block: var(--space-section);
+}
+
+.nosotros-block--reverse .nosotros-block__visual {
+  order: 2;
+}
+
+.nosotros-block--reverse .nosotros-block__content {
+  order: 1;
+}
+
+.nosotros-block__visual {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  background: linear-gradient(145deg, #e8e4df 0%, #d4cfc8 100%);
+  border-radius: var(--radius-img);
+}
+
+.nosotros-block--dark .nosotros-block__visual {
+  background: linear-gradient(145deg, #3d3428 0%, #1a1510 100%);
+}
+
+.nosotros-block__label {
+  display: block;
+  margin-bottom: var(--space-md);
+  color: var(--color-text-muted);
+}
+
+.nosotros-block--dark .nosotros-block__label {
+  color: var(--color-text-muted-on-dark);
+}
+
+.nosotros-block__title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-lg);
+}
+
+.nosotros-block__text {
+  font-size: var(--font-size-sm);
+  line-height: 1.75;
+  margin-bottom: var(--space-xl);
+  max-width: 40ch;
+}
+
+.nosotros-block--dark .nosotros-block__text {
+  color: var(--color-text-muted-on-dark);
+}
+
+.nosotros-block__link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-base);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
+}
+
+.nosotros-block--dark .nosotros-block__link {
+  color: var(--color-gold);
+}
+
+.nosotros-block:not(.nosotros-block--dark) .nosotros-block__link {
+  color: var(--color-text);
+}
+
+.nosotros-block__link:hover {
+  opacity: 0.75;
+}
+
+/* CTA final */
+.nosotros-cta {
+  padding-block: var(--space-section);
+  background: var(--color-dark);
+  text-align: center;
+}
+
+.nosotros-cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.nosotros-cta__title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-on-dark);
+}
+
+.nosotros-cta__subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted-on-dark);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .nosotros-block {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .nosotros-block--reverse .nosotros-block__visual,
+  .nosotros-block--reverse .nosotros-block__content {
+    order: unset;
+  }
+
+  .nosotros-block__visual {
+    aspect-ratio: 16 / 10;
+  }
+
+  .nosotros-block__text {
+    max-width: none;
+  }
+}

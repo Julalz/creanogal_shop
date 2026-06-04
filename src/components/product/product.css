@@ -1,0 +1,30 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  gap: var(--space-xl);
+  align-items: stretch;
+}
+
+.product-grid--narrow {
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.product-grid--cube {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 72rem;
+  margin-inline: auto;
+  gap: var(--space-xl);
+}
+
+@media (max-width: 900px) {
+  .product-grid--cube {
+    grid-template-columns: 1fr;
+    max-width: 24rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,128 @@
+.services__header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-2xl);
+}
+
+.services__label {
+  color: var(--color-text-muted);
+}
+
+.services__title {
+  font-size: var(--font-size-2xl);
+}
+
+.services__subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 42ch;
+}
+
+.services__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.services__grid > li {
+  display: flex;
+}
+
+.services__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-img);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.services__item:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-gold);
+  box-shadow: 0 1.5rem 2.5rem rgb(10 10 10 / 0.08);
+}
+
+.services__item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: var(--space-sm);
+  color: var(--color-gold);
+  background: var(--color-off-white);
+  border-radius: 50%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.services__item-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.services__item:hover .services__item-icon {
+  background: var(--color-gold);
+  color: var(--color-surface);
+}
+
+.services__item-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+}
+
+.services__item-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.services__item-link {
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-gold);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.services__item:hover .services__item-link {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 900px) {
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .services__item-link {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .services__grid {
+    grid-template-columns: 1fr;
+  }
+}

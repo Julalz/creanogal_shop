@@ -1,0 +1,42 @@
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-base);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.heading-serif {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-base);
+  line-height: 1.15;
+}
+
+em,
+i {
+  font-style: normal;
+}
+
+.label-caps {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-base);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+p + p {
+  margin-top: var(--space-md);
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-base);
+}

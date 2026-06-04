@@ -1,0 +1,50 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-base);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.85rem 2rem;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.btn--ghost {
+  color: var(--color-text-on-dark);
+  border-color: var(--color-text-on-dark);
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  background: var(--color-text-on-dark);
+  color: var(--color-black);
+}
+
+.btn--gold {
+  color: var(--color-text-on-dark);
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.btn--gold:hover {
+  background: var(--color-gold-hover);
+  border-color: var(--color-gold-hover);
+}
+
+.btn--outline-dark {
+  color: var(--color-text);
+  border-color: var(--color-text);
+  background: transparent;
+}
+
+.btn--outline-dark:hover {
+  background: var(--color-text);
+  color: var(--color-surface);
+}
