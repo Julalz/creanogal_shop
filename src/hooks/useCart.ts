@@ -1,3 +1,1 @@
-export function useCart() {
-  return { items: [], addItem: () => {}, removeItem: () => {} };
-}
+export { useCartContext as useCart } from "@/providers/CartProvider";

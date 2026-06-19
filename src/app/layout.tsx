@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { Footer } from "@/components/layout/Footer";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { Providers } from "@/components/providers/Providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,10 +18,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <SiteHeader />
-        <main className="site-main site-main--flush">{children}</main>
-        <Footer />
-        <CookieConsent />
+        <Providers>
+          <SiteHeader />
+          <main className="site-main site-main--flush">{children}</main>
+          <Footer />
+          <CookieConsent />
+        </Providers>
       </body>
     </html>
   );

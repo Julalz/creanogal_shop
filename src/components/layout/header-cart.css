@@ -1,0 +1,28 @@
+.header-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-on-dark);
+  padding: var(--space-sm);
+  transition: opacity 0.2s ease;
+}
+
+.header-cart:hover {
+  opacity: 0.85;
+}
+
+.header-cart__badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding-inline: 0.2rem;
+  font-size: 0.625rem;
+  line-height: 1.1rem;
+  text-align: center;
+  color: var(--color-black);
+  background: var(--color-gold);
+  border-radius: 999px;
+}

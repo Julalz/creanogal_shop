@@ -13,6 +13,7 @@ const HIDDEN_ON = [
   "/reformas",
   "/proyectos",
   "/contacto",
+  "/productos",
   "/accesibilidad",
   "/politica-privacidad",
   "/gestion-cookies",

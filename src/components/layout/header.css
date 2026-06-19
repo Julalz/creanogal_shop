@@ -84,6 +84,14 @@
   z-index: 1001;
 }
 
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 /* Menú móvil */
 .header__mobile-overlay {
   position: fixed;
@@ -170,6 +178,10 @@
   .header {
     justify-content: space-between;
     gap: var(--space-md);
+  }
+
+  .header__actions {
+    margin-left: auto;
   }
 
   .header__menu-btn {

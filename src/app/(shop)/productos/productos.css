@@ -22,6 +22,12 @@
 .productos-page__intro {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
-  max-width: 40ch;
+  max-width: 52ch;
   line-height: 1.6;
+  margin: 0;
+}
+
+.productos-page__section-title {
+  margin: 0 0 var(--space-lg);
+  font-size: var(--font-size-xl);
 }

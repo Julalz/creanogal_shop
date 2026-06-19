@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { HeaderCartLink } from "./HeaderCartLink";
 import "./header.css";
 import "./logo.css";
 
 const NAV_LINKS = [
   { label: "Inicio", href: "/" },
   { label: "Quooker", href: "/quooker" },
+  { label: "Tienda", href: "/productos" },
   { label: "Cocinas", href: "/cocinas" },
   { label: "Carpintería", href: "/carpinteria" },
   { label: "Reformas", href: "/reformas" },
@@ -48,22 +50,25 @@ export function Header() {
           ))}
         </nav>
 
-        <button
-          type="button"
-          className="header__menu-btn"
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-            {open ? (
-              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.5" />
-            ) : (
-              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" />
-            )}
-          </svg>
-        </button>
+        <div className="header__actions">
+          <HeaderCartLink />
+          <button
+            type="button"
+            className="header__menu-btn"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+              {open ? (
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.5" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div

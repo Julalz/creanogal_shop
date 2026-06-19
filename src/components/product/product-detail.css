@@ -1,0 +1,137 @@
+.product-detail {
+  padding-block: var(--space-section);
+  background: var(--color-off-white);
+}
+
+.product-detail__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.product-detail__breadcrumb {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.product-detail__breadcrumb a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.product-detail__breadcrumb a:hover {
+  color: var(--color-gold);
+}
+
+.product-detail__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: var(--space-3xl);
+  align-items: start;
+}
+
+.product-detail__media {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-xl);
+}
+
+.product-detail__image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.product-detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.product-detail__title {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+}
+
+.product-detail__price {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--color-gold);
+}
+
+.product-detail__price-from {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.product-detail__description {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.product-detail__finishes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.product-detail__swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.product-detail__swatch {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid rgb(0 0 0 / 0.1);
+}
+
+.product-detail__swatch--cromo { background-color: #c8c8c8; }
+.product-detail__swatch--acero-inox { background-color: #b8b8b8; }
+.product-detail__swatch--acero-oscuro { background-color: #6b6b6b; }
+.product-detail__swatch--negro { background-color: #2a2a2a; }
+.product-detail__swatch--cobre { background-color: #b87333; }
+.product-detail__swatch--bronce { background-color: #8b6914; }
+.product-detail__swatch--oro { background-color: #c9a227; }
+
+.product-detail__finishes-note {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.product-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding-top: var(--space-md);
+}
+
+.product-detail__install {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.product-detail__install a {
+  color: var(--color-text);
+}
+
+@media (max-width: 900px) {
+  .product-detail__layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+}

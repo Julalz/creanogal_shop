@@ -19,7 +19,7 @@ function accessory(
     priceFrom: false,
     finishes: [],
     infoHref: `/productos/${id}`,
-    configureHref: `/productos/${id}/configurar`,
+    configureHref: `/productos/${id}`,
   };
 }
 
@@ -39,7 +39,7 @@ function product(
     priceFrom: true,
     finishes: PRODUCT_FINISHES,
     infoHref: `/productos/${id}`,
-    configureHref: `/productos/${id}/configurar`,
+    configureHref: `/productos/${id}`,
   };
 }
 
