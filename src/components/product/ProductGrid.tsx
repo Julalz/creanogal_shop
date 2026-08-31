@@ -13,6 +13,7 @@ export function ProductGrid({ products, className = "" }: ProductGridProps) {
       {products.map((product) => (
         <li key={product.id}>
           <ProductCard
+            productId={product.id}
             title={product.title}
             description={product.description}
             imageUrl={product.imageUrl}

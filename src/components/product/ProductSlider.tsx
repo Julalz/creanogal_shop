@@ -48,6 +48,7 @@ export function ProductSlider({ products, perSlide = PER_SLIDE }: ProductSliderP
               {slideProducts.map((product) => (
                 <li key={product.id}>
                   <ProductCard
+                    productId={product.id}
                     title={product.title}
                     description={product.description}
                     imageUrl={product.imageUrl}

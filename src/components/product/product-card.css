@@ -184,13 +184,17 @@
   background-color: #c9a227;
 }
 
+.product-card__actions {
+  margin-top: auto;
+  padding-top: var(--space-md);
+}
+
 .product-card__footer {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.35rem 0.5rem;
-  margin-top: auto;
-  padding-top: var(--space-md);
+  padding-top: var(--space-sm);
 }
 
 .product-card__footer-sep {

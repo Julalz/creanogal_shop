@@ -14,7 +14,7 @@ type CartSummaryProps = {
 export function CartSummary({
   subtotal,
   checkoutHref = "/checkout",
-  checkoutLabel = "Finalizar compra",
+  checkoutLabel = "Formas de pago",
   showNote = true,
 }: CartSummaryProps) {
   return (

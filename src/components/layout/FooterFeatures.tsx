@@ -14,6 +14,8 @@ const HIDDEN_ON = [
   "/proyectos",
   "/contacto",
   "/productos",
+  "/checkout",
+  "/carrito",
   "/accesibilidad",
   "/politica-privacidad",
   "/gestion-cookies",

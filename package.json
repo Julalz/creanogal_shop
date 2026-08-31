@@ -16,7 +16,8 @@
     "next": "^15.0.0",
     "nodemailer": "^8.0.10",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "stripe": "^22.5.0"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.19.11",

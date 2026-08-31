@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { formatPrice } from "@/lib/format-price";
 import { useCart } from "@/hooks/useCart";
 import "./checkout.css";
 
-type Status = "idle" | "submitting" | "success" | "error";
+type PaymentMethod = "klarna" | "card";
+type SubmittingMethod = PaymentMethod | null;
 
 type FormState = {
   name: string;
@@ -29,50 +31,57 @@ const INITIAL_FORM: FormState = {
 };
 
 export function CheckoutForm() {
-  const { lines, subtotal, isReady, clearCart } = useCart();
+  const searchParams = useSearchParams();
+  const cancelled = searchParams.get("cancelled") === "1";
+  const formRef = useRef<HTMLFormElement>(null);
+  const { lines, subtotal, isReady } = useCart();
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
-  const [status, setStatus] = useState<Status>("idle");
+  const [submitting, setSubmitting] = useState<SubmittingMethod>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((current) => ({ ...current, [key]: value }));
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus("submitting");
+  async function startCheckout(paymentMethod: PaymentMethod) {
+    const formElement = formRef.current;
+    if (!formElement || !formElement.reportValidity()) return;
+
+    setSubmitting(paymentMethod);
     setErrorMessage("");
 
+    const payload = {
+      customer: form,
+      items: lines.map((line) => ({
+        productId: line.productId,
+        title: line.product.title,
+        quantity: line.quantity,
+        unitPrice: line.product.price,
+        lineTotal: line.lineTotal,
+      })),
+      subtotal,
+      paymentMethod,
+    };
+
     try {
-      const response = await fetch("/api/checkout", {
+      const response = await fetch("/api/stripe/checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customer: form,
-          items: lines.map((line) => ({
-            productId: line.productId,
-            title: line.product.title,
-            quantity: line.quantity,
-            unitPrice: line.product.price,
-            lineTotal: line.lineTotal,
-          })),
-          subtotal,
-        }),
+        body: JSON.stringify(payload),
       });
 
-      const data = (await response.json()) as { ok?: boolean; error?: string };
+      const data = (await response.json()) as { ok?: boolean; url?: string; error?: string };
 
-      if (!response.ok || !data.ok) {
-        setStatus("error");
-        setErrorMessage(data.error ?? "No se pudo enviar el pedido. Inténtalo de nuevo.");
+      if (!response.ok || !data.ok || !data.url) {
+        setErrorMessage(data.error ?? "No se pudo iniciar el pago. Inténtalo de nuevo.");
+        setSubmitting(null);
         return;
       }
 
-      clearCart();
-      setStatus("success");
+      window.location.href = data.url;
     } catch {
-      setStatus("error");
       setErrorMessage("Error de conexión. Comprueba tu red e inténtalo de nuevo.");
+      setSubmitting(null);
     }
   }
 
@@ -86,7 +95,7 @@ export function CheckoutForm() {
     );
   }
 
-  if (lines.length === 0 && status !== "success") {
+  if (lines.length === 0) {
     return (
       <div className="checkout-page">
         <div className="container checkout-page__inner">
@@ -105,25 +114,7 @@ export function CheckoutForm() {
     );
   }
 
-  if (status === "success") {
-    return (
-      <div className="checkout-page">
-        <div className="container checkout-page__inner">
-          <div className="checkout-page__success">
-            <span className="label-caps">Pedido recibido</span>
-            <h1 className="checkout-page__title heading-serif">Gracias por tu pedido</h1>
-            <p>
-              Hemos recibido tu solicitud. Te contactaremos en breve para confirmar detalles,
-              acabados y opciones de pago (incluido financiación con SeQura cuando esté activa).
-            </p>
-            <Link href="/productos" className="btn btn--gold">
-              Seguir comprando
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const isBusy = submitting !== null;
 
   return (
     <div className="checkout-page">
@@ -132,13 +123,19 @@ export function CheckoutForm() {
           <span className="label-caps">Finalizar</span>
           <h1 className="checkout-page__title heading-serif">Checkout</h1>
           <p className="checkout-page__intro">
-            Completa tus datos. El pago con SeQura se activará próximamente; por ahora
-            confirmaremos el pedido contigo por email o teléfono.
+            Completa tus datos y elige tu forma de pago. Financiación con Klarna o pago con tarjeta,
+            procesados de forma segura con Stripe.
           </p>
         </header>
 
+        {cancelled && (
+          <p className="checkout-form__notice" role="status">
+            Has cancelado el pago. Puedes intentarlo de nuevo cuando quieras.
+          </p>
+        )}
+
         <div className="checkout-page__layout">
-          <form className="checkout-form" onSubmit={handleSubmit} noValidate>
+          <form ref={formRef} className="checkout-form" noValidate>
             <fieldset className="checkout-form__section">
               <legend className="checkout-form__legend">Datos de contacto</legend>
               <div className="checkout-form__grid">
@@ -226,20 +223,6 @@ export function CheckoutForm() {
                 </label>
               </div>
             </fieldset>
-
-            {status === "error" && (
-              <p className="checkout-form__error" role="alert">
-                {errorMessage}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              className="btn btn--gold checkout-form__submit"
-              disabled={status === "submitting"}
-            >
-              {status === "submitting" ? "Enviando pedido…" : "Confirmar pedido"}
-            </button>
           </form>
 
           <aside className="checkout-order">
@@ -258,7 +241,42 @@ export function CheckoutForm() {
               <span>Total</span>
               <span>{formatPrice(subtotal)}</span>
             </div>
-            <p className="checkout-order__note">IVA incluido. Envío e instalación a confirmar.</p>
+
+            <div className="checkout-order__payment">
+              <h3 className="checkout-order__payment-title">Formas de pago</h3>
+              <p className="checkout-order__payment-note">
+                Elige cómo quieres pagar. Gestionado de forma segura con Stripe.
+              </p>
+
+              {errorMessage && (
+                <p className="checkout-form__error" role="alert">
+                  {errorMessage}
+                </p>
+              )}
+
+              <div className="checkout-order__payment-actions">
+                <button
+                  type="button"
+                  className="btn btn--gold checkout-order__pay-btn"
+                  disabled={isBusy}
+                  onClick={() => startCheckout("klarna")}
+                >
+                  {submitting === "klarna" ? "Redirigiendo…" : "Financiación"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--outline-dark checkout-order__pay-btn"
+                  disabled={isBusy}
+                  onClick={() => startCheckout("card")}
+                >
+                  {submitting === "card" ? "Redirigiendo…" : "Pagar con tarjeta"}
+                </button>
+              </div>
+            </div>
+
+            <p className="checkout-order__note">
+              IVA incluido. Envío e instalación a confirmar tras el pedido.
+            </p>
           </aside>
         </div>
       </div>

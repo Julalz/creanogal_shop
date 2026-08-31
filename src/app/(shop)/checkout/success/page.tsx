@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { CheckoutForm } from "@/components/checkout/CheckoutForm";
+import { CheckoutSuccess } from "@/components/checkout/CheckoutSuccess";
 
 export const metadata: Metadata = {
-  title: "Checkout | Tienda Quooker · Creanogal",
-  description: "Finaliza tu pedido de productos Quooker con Creanogal.",
+  title: "Pedido confirmado | Tienda Quooker · Creanogal",
+  description: "Tu pedido Quooker ha sido recibido correctamente.",
 };
 
-export default function CheckoutPage() {
+export default function CheckoutSuccessPage() {
   return (
     <Suspense
       fallback={
         <div className="checkout-page">
           <div className="container checkout-page__inner">
-            <p>Cargando…</p>
+            <p>Confirmando tu pago…</p>
           </div>
         </div>
       }
     >
-      <CheckoutForm />
+      <CheckoutSuccess />
     </Suspense>
   );
 }

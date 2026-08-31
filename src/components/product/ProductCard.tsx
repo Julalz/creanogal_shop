@@ -1,8 +1,10 @@
 import Image from "next/image";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { ProductFinish } from "@/types/product";
 import "./product-card.css";
 
 export type ProductCardProps = {
+  productId: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -25,6 +27,7 @@ function formatPrice(amount: number) {
 }
 
 export function ProductCard({
+  productId,
   title,
   description,
   imageUrl,
@@ -78,6 +81,10 @@ export function ProductCard({
             </ul>
           </div>
         )}
+
+        <div className="product-card__actions">
+          <AddToCartButton productId={productId} className="add-to-cart-btn--card" />
+        </div>
 
         <footer className="product-card__footer">
           <a href={infoHref} className="product-card__link">
