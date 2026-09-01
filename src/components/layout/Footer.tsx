@@ -17,6 +17,11 @@ const LEGAL_LINKS = [
   { label: "Declaración de accesibilidad", href: "/accesibilidad" },
 ] as const;
 
+const DEV_WHATSAPP = "34633326622";
+const DEV_WHATSAPP_MSG =
+  "Hola, te escribo desde la web de Creanogal porque estoy interesado en el diseño y desarrollo de una página web / software a medida y me gustaría recibir más información y un presupuesto.";
+const DEV_WHATSAPP_URL = `https://api.whatsapp.com/send/?phone=${DEV_WHATSAPP}&text=${encodeURIComponent(DEV_WHATSAPP_MSG)}&type=phone_number&app_absent=0`;
+
 export function Footer() {
   return (
     <footer className="site-footer">
@@ -83,7 +88,18 @@ export function Footer() {
         </nav>
 
         <p className="footer-info__credit container">
-          Hecho con <span className="footer-info__heart" aria-label="amor">♥</span> por Juli Alz
+          Hecho con <span className="footer-info__heart" aria-label="amor">♥</span> por{" "}
+          <a
+            href={DEV_WHATSAPP_URL}
+            className="footer-info__credit-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Juli Alz
+            <span className="footer-info__credit-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
         </p>
       </div>
     </footer>

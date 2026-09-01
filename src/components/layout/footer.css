@@ -116,6 +116,32 @@
   color: var(--color-gold);
 }
 
+.footer-info__credit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-info__credit-link:hover {
+  color: var(--color-gold);
+}
+
+.footer-info__credit-arrow {
+  display: inline-block;
+  font-size: 0.85em;
+  opacity: 0.35;
+  transform: translateX(0);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.footer-info__credit-link:hover .footer-info__credit-arrow {
+  opacity: 0.75;
+  transform: translateX(3px);
+}
+
 @media (max-width: 900px) {
   .footer-info__grid {
     grid-template-columns: repeat(2, 1fr);
