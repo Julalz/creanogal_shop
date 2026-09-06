@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { COMPANY, formatLegalIdentity } from "@/lib/company-legal";
 import "../accesibilidad/legal.css";
 
 export const metadata: Metadata = {
@@ -7,9 +8,6 @@ export const metadata: Metadata = {
     "Política de privacidad de Creanogal: cómo tratamos y protegemos tus datos personales.",
 };
 
-const LAST_UPDATE = "junio de 2026";
-const EMAIL = "creanogal@gmail.com";
-
 export default function PoliticaPrivacidadPage() {
   return (
     <article className="legal">
@@ -17,17 +15,16 @@ export default function PoliticaPrivacidadPage() {
         <header className="legal__header">
           <span className="legal__eyebrow label-caps">Información legal</span>
           <h1 className="legal__title heading-serif">Política de privacidad</h1>
-          <p className="legal__updated">Última actualización: {LAST_UPDATE}</p>
+          <p className="legal__updated">Última actualización: {COMPANY.lastUpdate}</p>
         </header>
 
         <section className="legal__section">
           <h2 className="legal__heading heading-serif">Responsable del tratamiento</h2>
           <p className="legal__text">
-            El responsable del tratamiento de tus datos personales es Creanogal, con domicilio en
-            Las Palmas de Gran Canaria. Para cualquier cuestión relacionada con tus datos puedes
-            escribirnos a{" "}
-            <a href={`mailto:${EMAIL}`} className="legal__link">
-              {EMAIL}
+            El responsable del tratamiento de tus datos personales es {formatLegalIdentity()}.
+            Para cualquier cuestión relacionada con tus datos puedes escribirnos a{" "}
+            <a href={`mailto:${COMPANY.email}`} className="legal__link">
+              {COMPANY.email}
             </a>
             .
           </p>
@@ -84,8 +81,8 @@ export default function PoliticaPrivacidadPage() {
           </ul>
           <p className="legal__text">
             Para ejercerlos, escríbenos a{" "}
-            <a href={`mailto:${EMAIL}`} className="legal__link">
-              {EMAIL}
+            <a href={`mailto:${COMPANY.email}`} className="legal__link">
+              {COMPANY.email}
             </a>
             . También tienes derecho a reclamar ante la Agencia Española de Protección de Datos.
           </p>

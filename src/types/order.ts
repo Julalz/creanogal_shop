@@ -21,5 +21,8 @@ export type OrderPayload = {
   items: OrderItem[];
   subtotal: number;
   paymentStatus: "paid" | "pending";
+  paymentProvider?: "stripe" | "sequra";
   stripeSessionId?: string;
+  sequraOrderUuid?: string;
+  merchantOrderRef?: string;
 };

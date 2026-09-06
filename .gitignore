@@ -8,7 +8,7 @@ out
 next-env.d.ts
 
 # OpenNext
-.open-next
+.data
 
 # wrangler files
 .wrangler

@@ -21,6 +21,7 @@ const HIDDEN_ON = [
   "/gestion-cookies",
   "/politica-cookies",
   "/aviso-legal",
+  "/politica-devoluciones",
 ];
 
 export function FooterFeatures() {

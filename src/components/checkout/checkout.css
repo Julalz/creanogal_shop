@@ -235,3 +235,74 @@
     grid-template-columns: 1fr;
   }
 }
+
+.sequra-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.sequra-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.sequra-overlay__panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 42rem);
+  max-height: 90vh;
+  overflow: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sequra-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.sequra-overlay__header h2 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.sequra-overlay__close {
+  border: none;
+  background: transparent;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+
+.sequra-overlay__loading,
+.sequra-overlay__error,
+.sequra-overlay__hint {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.sequra-overlay__error {
+  color: #b00020;
+}
+
+.sequra-overlay__host {
+  min-height: 2rem;
+}
+
+.sequra-overlay__done {
+  align-self: flex-start;
+}

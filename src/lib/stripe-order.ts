@@ -56,6 +56,7 @@ export function buildOrderFromSession(session: Stripe.Checkout.Session): OrderPa
     items,
     subtotal,
     paymentStatus: "paid",
+    paymentProvider: "stripe",
     stripeSessionId: session.id,
   };
 }

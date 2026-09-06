@@ -130,9 +130,16 @@ async function sendAdminOrderEmail(
   adminTo: string,
   order: OrderPayload,
 ): Promise<SentEmailInfo> {
-  const { customer, items, subtotal, paymentStatus, stripeSessionId } = order;
+  const { customer, items, subtotal, paymentStatus, stripeSessionId, paymentProvider, merchantOrderRef, sequraOrderUuid } = order;
   const paymentLabel =
-    paymentStatus === "paid" ? "Pagado (Klarna / Stripe)" : "Pago pendiente de confirmar";
+    paymentProvider === "sequra"
+      ? paymentStatus === "paid"
+        ? "Pagado (SeQura)"
+        : "Financiación SeQura pendiente"
+      : paymentStatus === "paid"
+        ? "Pagado (Klarna / Stripe)"
+        : "Pago pendiente de confirmar";
+  const paymentReference = stripeSessionId ?? merchantOrderRef ?? sequraOrderUuid ?? null;
 
   const subject =
     paymentStatus === "paid"
@@ -144,6 +151,8 @@ async function sendAdminOrderEmail(
     "",
     `Estado del pago: ${paymentLabel}`,
     stripeSessionId ? `Referencia Stripe: ${stripeSessionId}` : null,
+    merchantOrderRef ? `Referencia pedido: ${merchantOrderRef}` : null,
+    sequraOrderUuid ? `Referencia SeQura: ${sequraOrderUuid}` : null,
     "",
     `Cliente: ${customer.name}`,
     `Email: ${customer.email}`,
@@ -178,7 +187,7 @@ async function sendAdminOrderEmail(
           ${row("Email", `<a href="mailto:${escapeHtml(customer.email)}" style="color: #e07020; text-decoration: none;">${escapeHtml(customer.email)}</a>`)}
           ${row("Teléfono", escapeHtml(customer.phone))}
           ${row("Dirección", `${escapeHtml(customer.address)}, ${escapeHtml(customer.postalCode)} ${escapeHtml(customer.city)}`)}
-          ${stripeSessionId ? row("Referencia Stripe", escapeHtml(stripeSessionId)) : ""}
+          ${paymentReference ? row("Referencia de pago", escapeHtml(paymentReference)) : ""}
         </table>
       </td>
     </tr>
@@ -222,7 +231,7 @@ async function sendCustomerConfirmationEmail(
   from: string,
   order: OrderPayload,
 ): Promise<SentEmailInfo> {
-  const { customer, items, subtotal, stripeSessionId } = order;
+  const { customer, items, subtotal, stripeSessionId, merchantOrderRef } = order;
   const firstName = customer.name.split(" ")[0] || customer.name;
   const subject = "Confirmación de tu pedido Quooker — Creanogal";
 
@@ -235,6 +244,7 @@ async function sendCustomerConfirmationEmail(
     buildItemsText(items),
     "",
     `TOTAL PAGADO: ${formatEuro(subtotal)}`,
+    merchantOrderRef ? `Referencia: ${merchantOrderRef}` : null,
     stripeSessionId ? `Referencia: ${stripeSessionId}` : null,
     "",
     "Próximos pasos:",

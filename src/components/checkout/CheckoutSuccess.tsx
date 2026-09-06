@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useCart } from "@/hooks/useCart";
 import "./checkout.css";
 
-type VerifyState = "loading" | "paid" | "pending" | "error";
+type VerifyState = "loading" | "paid" | "pending" | "on_hold" | "error";
 
 type EmailStatus =
   | { type: "sent"; admin: string; customer: string | null }
@@ -16,23 +16,68 @@ type EmailStatus =
 
 export function CheckoutSuccess() {
   const searchParams = useSearchParams();
+  const provider = searchParams.get("provider") ?? "stripe";
   const sessionId = searchParams.get("session_id");
+  const sequraOrderRef = searchParams.get("order_ref_1");
   const { clearCart } = useCart();
   const [state, setState] = useState<VerifyState>("loading");
   const [emailStatus, setEmailStatus] = useState<EmailStatus>(null);
 
   useEffect(() => {
-    if (!sessionId) {
-      setState("error");
-      return;
-    }
-
     let cancelled = false;
 
-    async function verify() {
+    async function confirmEmails(
+      url: string,
+      body: Record<string, string>,
+    ): Promise<EmailStatus> {
+      try {
+        const confirmResponse = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const confirmData = (await confirmResponse.json()) as {
+          ok?: boolean;
+          emailSent?: boolean;
+          alreadySent?: boolean;
+          emails?: { admin: string; customer: string | null };
+          error?: string;
+        };
+
+        if (confirmResponse.ok && confirmData.ok) {
+          if (confirmData.emailSent && confirmData.emails) {
+            return {
+              type: "sent",
+              admin: confirmData.emails.admin,
+              customer: confirmData.emails.customer,
+            };
+          }
+          if (confirmData.alreadySent) {
+            return { type: "already" };
+          }
+        }
+
+        return {
+          type: "failed",
+          message: confirmData.error ?? "No se pudo enviar el email de confirmación.",
+        };
+      } catch {
+        return {
+          type: "failed",
+          message: "Error de conexión al enviar la confirmación por email.",
+        };
+      }
+    }
+
+    async function verifyStripe() {
+      if (!sessionId) {
+        setState("error");
+        return;
+      }
+
       try {
         const response = await fetch(
-          `/api/stripe/session?session_id=${encodeURIComponent(sessionId!)}`,
+          `/api/stripe/session?session_id=${encodeURIComponent(sessionId)}`,
         );
         const data = (await response.json()) as { ok?: boolean; paid?: boolean };
 
@@ -45,48 +90,8 @@ export function CheckoutSuccess() {
 
         if (data.paid) {
           clearCart();
-
-          try {
-            const confirmResponse = await fetch("/api/stripe/confirm-order", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sessionId: sessionId! }),
-            });
-            const confirmData = (await confirmResponse.json()) as {
-              ok?: boolean;
-              emailSent?: boolean;
-              alreadySent?: boolean;
-              emails?: { admin: string; customer: string | null };
-              error?: string;
-            };
-
-            if (cancelled) return;
-
-            if (confirmResponse.ok && confirmData.ok) {
-              if (confirmData.emailSent && confirmData.emails) {
-                setEmailStatus({
-                  type: "sent",
-                  admin: confirmData.emails.admin,
-                  customer: confirmData.emails.customer,
-                });
-              } else if (confirmData.alreadySent) {
-                setEmailStatus({ type: "already" });
-              }
-            } else {
-              setEmailStatus({
-                type: "failed",
-                message: confirmData.error ?? "No se pudo enviar el email de confirmación.",
-              });
-            }
-          } catch {
-            if (!cancelled) {
-              setEmailStatus({
-                type: "failed",
-                message: "Error de conexión al enviar la confirmación por email.",
-              });
-            }
-          }
-
+          const status = await confirmEmails("/api/stripe/confirm-order", { sessionId });
+          if (!cancelled) setEmailStatus(status);
           setState("paid");
         } else {
           setState("pending");
@@ -96,19 +101,72 @@ export function CheckoutSuccess() {
       }
     }
 
-    verify();
+    async function verifySequra() {
+      if (!sequraOrderRef) {
+        setState("error");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/sequra/status?order_ref_1=${encodeURIComponent(sequraOrderRef)}`,
+        );
+        const data = (await response.json()) as {
+          ok?: boolean;
+          paid?: boolean;
+          onHold?: boolean;
+          emailSent?: boolean;
+        };
+
+        if (cancelled) return;
+
+        if (!response.ok || !data.ok) {
+          setState("error");
+          return;
+        }
+
+        if (data.paid) {
+          clearCart();
+          if (!data.emailSent) {
+            const status = await confirmEmails("/api/sequra/confirm-order", {
+              merchantOrderRef: sequraOrderRef,
+            });
+            if (!cancelled) setEmailStatus(status);
+          } else if (!cancelled) {
+            setEmailStatus({ type: "already" });
+          }
+          setState("paid");
+          return;
+        }
+
+        if (data.onHold) {
+          setState("on_hold");
+          return;
+        }
+
+        setState("pending");
+      } catch {
+        if (!cancelled) setState("error");
+      }
+    }
+
+    if (provider === "sequra") {
+      verifySequra();
+    } else {
+      verifyStripe();
+    }
 
     return () => {
       cancelled = true;
     };
-  }, [sessionId, clearCart]);
+  }, [provider, sessionId, sequraOrderRef, clearCart]);
 
   if (state === "loading") {
     return (
       <div className="checkout-page">
         <div className="container checkout-page__inner">
           <div className="checkout-page__success">
-            <p>Confirmando tu pago…</p>
+            <p>Confirmando tu pedido…</p>
           </div>
         </div>
       </div>
@@ -121,9 +179,10 @@ export function CheckoutSuccess() {
         <div className="container checkout-page__inner">
           <div className="checkout-page__success">
             <span className="label-caps">Atención</span>
-            <h1 className="checkout-page__title heading-serif">No pudimos verificar el pago</h1>
+            <h1 className="checkout-page__title heading-serif">No pudimos verificar el pedido</h1>
             <p>
-              Si el cargo aparece en tu cuenta, contáctanos y te ayudamos con el pedido.
+              Si el pago o la financiación aparece confirmada, contáctanos y te ayudamos con el
+              pedido.
             </p>
             <Link href="/contacto" className="btn btn--gold">
               Contactar
@@ -134,17 +193,31 @@ export function CheckoutSuccess() {
     );
   }
 
+  const title =
+    state === "paid"
+      ? "Gracias por tu pedido"
+      : state === "on_hold"
+        ? "Pedido en revisión"
+        : "Pedido recibido";
+
+  const description =
+    state === "paid"
+      ? provider === "sequra"
+        ? "Tu financiación con SeQura se ha confirmado. Nos pondremos en contacto para acabados e instalación."
+        : "Tu pago se ha procesado correctamente. Nos pondremos en contacto para acabados e instalación."
+      : state === "on_hold"
+        ? "SeQura está revisando tu solicitud de financiación. Te avisaremos en cuanto esté confirmada."
+        : "Estamos confirmando tu pedido. Te avisaremos en cuanto esté verificado.";
+
   return (
     <div className="checkout-page">
       <div className="container checkout-page__inner">
         <div className="checkout-page__success">
-          <span className="label-caps">{state === "paid" ? "Pago confirmado" : "Pedido recibido"}</span>
-          <h1 className="checkout-page__title heading-serif">Gracias por tu pedido</h1>
-          <p>
-            {state === "paid"
-              ? "Tu pago se ha procesado correctamente. Nos pondremos en contacto para acabados e instalación."
-              : "Estamos confirmando tu pago. Te avisaremos en cuanto esté verificado."}
-          </p>
+          <span className="label-caps">
+            {state === "paid" ? "Pedido confirmado" : state === "on_hold" ? "En revisión" : "Pedido recibido"}
+          </span>
+          <h1 className="checkout-page__title heading-serif">{title}</h1>
+          <p>{description}</p>
 
           {emailStatus?.type === "sent" && (
             <p className="checkout-page__email-status checkout-page__email-status--ok" role="status">
@@ -162,7 +235,7 @@ export function CheckoutSuccess() {
 
           {emailStatus?.type === "failed" && (
             <p className="checkout-page__email-status checkout-page__email-status--error" role="alert">
-              {emailStatus.message} El pedido sí está pagado; contáctanos si no recibes noticias.
+              {emailStatus.message} El pedido sí está registrado; contáctanos si no recibes noticias.
             </p>
           )}
 

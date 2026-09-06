@@ -11,6 +11,7 @@ const SERVICES = [
 
 const LEGAL_LINKS = [
   { label: "Aviso legal", href: "/aviso-legal" },
+  { label: "Desistimiento y devoluciones", href: "/politica-devoluciones" },
   { label: "Política de cookies", href: "/politica-cookies" },
   { label: "Gestión de cookies", href: "/gestion-cookies" },
   { label: "Política de privacidad", href: "/politica-privacidad" },

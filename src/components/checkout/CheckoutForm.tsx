@@ -5,9 +5,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { formatPrice } from "@/lib/format-price";
 import { useCart } from "@/hooks/useCart";
+import { SequraFormOverlay } from "./SequraFormOverlay";
 import "./checkout.css";
 
-type PaymentMethod = "klarna" | "card";
+type PaymentMethod = "sequra" | "klarna" | "card";
 type SubmittingMethod = PaymentMethod | null;
 
 type FormState = {
@@ -38,19 +39,14 @@ export function CheckoutForm() {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [submitting, setSubmitting] = useState<SubmittingMethod>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [sequraOrderRef, setSequraOrderRef] = useState<string | null>(null);
 
   function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((current) => ({ ...current, [key]: value }));
   }
 
-  async function startCheckout(paymentMethod: PaymentMethod) {
-    const formElement = formRef.current;
-    if (!formElement || !formElement.reportValidity()) return;
-
-    setSubmitting(paymentMethod);
-    setErrorMessage("");
-
-    const payload = {
+  function buildPayload() {
+    return {
       customer: form,
       items: lines.map((line) => ({
         productId: line.productId,
@@ -60,14 +56,21 @@ export function CheckoutForm() {
         lineTotal: line.lineTotal,
       })),
       subtotal,
-      paymentMethod,
     };
+  }
+
+  async function startStripeCheckout(paymentMethod: "klarna" | "card") {
+    const formElement = formRef.current;
+    if (!formElement || !formElement.reportValidity()) return;
+
+    setSubmitting(paymentMethod);
+    setErrorMessage("");
 
     try {
       const response = await fetch("/api/stripe/checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...buildPayload(), paymentMethod }),
       });
 
       const data = (await response.json()) as { ok?: boolean; url?: string; error?: string };
@@ -83,6 +86,49 @@ export function CheckoutForm() {
       setErrorMessage("Error de conexión. Comprueba tu red e inténtalo de nuevo.");
       setSubmitting(null);
     }
+  }
+
+  async function startSequraCheckout() {
+    const formElement = formRef.current;
+    if (!formElement || !formElement.reportValidity()) return;
+
+    setSubmitting("sequra");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/sequra/solicitation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildPayload()),
+      });
+
+      const data = (await response.json()) as {
+        ok?: boolean;
+        merchantOrderRef?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !data.ok || !data.merchantOrderRef) {
+        setErrorMessage(data.error ?? "No se pudo iniciar la financiación SeQura.");
+        setSubmitting(null);
+        return;
+      }
+
+      setSequraOrderRef(data.merchantOrderRef);
+      setSubmitting(null);
+    } catch {
+      setErrorMessage("Error de conexión. Comprueba tu red e inténtalo de nuevo.");
+      setSubmitting(null);
+    }
+  }
+
+  function closeSequraOverlay() {
+    setSequraOrderRef(null);
+  }
+
+  function goToSequraSuccess() {
+    if (!sequraOrderRef) return;
+    window.location.href = `/checkout/success?provider=sequra&order_ref_1=${encodeURIComponent(sequraOrderRef)}`;
   }
 
   if (!isReady) {
@@ -118,13 +164,21 @@ export function CheckoutForm() {
 
   return (
     <div className="checkout-page">
+      {sequraOrderRef && (
+        <SequraFormOverlay
+          merchantOrderRef={sequraOrderRef}
+          onClose={closeSequraOverlay}
+          onComplete={goToSequraSuccess}
+        />
+      )}
+
       <div className="container checkout-page__inner">
         <header className="checkout-page__header">
           <span className="label-caps">Finalizar</span>
           <h1 className="checkout-page__title heading-serif">Checkout</h1>
           <p className="checkout-page__intro">
-            Completa tus datos y elige tu forma de pago. Financiación con Klarna o pago con tarjeta,
-            procesados de forma segura con Stripe.
+            Completa tus datos y elige tu forma de pago: financiación con SeQura o Klarna, o tarjeta
+            con Stripe.
           </p>
         </header>
 
@@ -245,7 +299,7 @@ export function CheckoutForm() {
             <div className="checkout-order__payment">
               <h3 className="checkout-order__payment-title">Formas de pago</h3>
               <p className="checkout-order__payment-note">
-                Elige cómo quieres pagar. Gestionado de forma segura con Stripe.
+                Financiación con SeQura o Klarna. Tarjeta procesada con Stripe.
               </p>
 
               {errorMessage && (
@@ -259,15 +313,23 @@ export function CheckoutForm() {
                   type="button"
                   className="btn btn--gold checkout-order__pay-btn"
                   disabled={isBusy}
-                  onClick={() => startCheckout("klarna")}
+                  onClick={startSequraCheckout}
                 >
-                  {submitting === "klarna" ? "Redirigiendo…" : "Financiación"}
+                  {submitting === "sequra" ? "Preparando…" : "Financiación SeQura"}
                 </button>
                 <button
                   type="button"
                   className="btn btn--outline-dark checkout-order__pay-btn"
                   disabled={isBusy}
-                  onClick={() => startCheckout("card")}
+                  onClick={() => startStripeCheckout("klarna")}
+                >
+                  {submitting === "klarna" ? "Redirigiendo…" : "Financiación Klarna"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--outline-dark checkout-order__pay-btn"
+                  disabled={isBusy}
+                  onClick={() => startStripeCheckout("card")}
                 >
                   {submitting === "card" ? "Redirigiendo…" : "Pagar con tarjeta"}
                 </button>
