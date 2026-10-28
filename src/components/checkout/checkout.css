@@ -173,13 +173,15 @@
 
 .checkout-order__payment-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: var(--space-sm);
   margin-top: var(--space-xs);
 }
 
 .checkout-order__pay-btn {
-  width: 100%;
+  flex: 1 1 8rem;
+  min-width: 0;
   justify-content: center;
 }
 
@@ -239,31 +241,38 @@
 .sequra-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 999999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-md);
+  pointer-events: none;
 }
 
 .sequra-overlay__backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
+  pointer-events: auto;
+  z-index: 0;
 }
 
-.sequra-overlay__panel {
+.sequra-overlay__backdrop--loading {
+  z-index: 1000001;
+}
+
+.sequra-overlay__loading-card {
   position: relative;
-  z-index: 1;
-  width: min(100%, 42rem);
-  max-height: 90vh;
-  overflow: auto;
+  z-index: 1000002;
+  width: min(calc(100vw - 2 * var(--space-md)), 22rem);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  pointer-events: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
 }
 
 .sequra-overlay__header {
@@ -287,6 +296,62 @@
   color: var(--color-text-muted);
 }
 
+.sequra-overlay__loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  min-height: 8rem;
+  text-align: center;
+}
+
+.sequra-overlay__loader-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  height: 2rem;
+}
+
+.sequra-overlay__loader-bars span {
+  display: block;
+  width: 5px;
+  height: 100%;
+  background: #0d9488;
+  border-radius: 2px;
+  animation: sequra-bar-pulse 0.9s ease-in-out infinite;
+}
+
+.sequra-overlay__loader-bars span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.sequra-overlay__loader-bars span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.sequra-overlay__loader-bars span:nth-child(4) {
+  animation-delay: 0.36s;
+}
+
+.sequra-overlay__loader-bars span:nth-child(5) {
+  animation-delay: 0.48s;
+}
+
+@keyframes sequra-bar-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
 .sequra-overlay__loading,
 .sequra-overlay__error,
 .sequra-overlay__hint {
@@ -300,9 +365,66 @@
 }
 
 .sequra-overlay__host {
-  min-height: 2rem;
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.sequra-overlay__assist {
+  position: fixed;
+  z-index: 1000002;
+  left: 50%;
+  bottom: var(--space-md);
+  width: min(calc(100vw - 2 * var(--space-md)), 22rem);
+  translate: -50% 0;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-xs);
+  pointer-events: auto;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
 }
 
 .sequra-overlay__done {
-  align-self: flex-start;
+  width: 100%;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  padding: 0.65rem 1rem;
+}
+
+.sequra-overlay__assist .sequra-overlay__hint {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+body.sequra-form-open {
+  overflow: hidden;
+}
+
+body.sequra-form-open iframe.sq-identification-iframe,
+body.sequra-form-open iframe[id^="sq-identification-"] {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  z-index: 1000000 !important;
+  transition: opacity 0.2s ease;
+}
+
+body.sequra-form-open--loading iframe.sq-identification-iframe,
+body.sequra-form-open--loading iframe[id^="sq-identification-"] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }

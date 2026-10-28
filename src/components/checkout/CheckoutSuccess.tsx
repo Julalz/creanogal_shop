@@ -69,7 +69,7 @@ export function CheckoutSuccess() {
       }
     }
 
-    async function verifyStripe() {
+    async function verifyCardPayment() {
       if (!sessionId) {
         setState("error");
         return;
@@ -153,7 +153,7 @@ export function CheckoutSuccess() {
     if (provider === "sequra") {
       verifySequra();
     } else {
-      verifyStripe();
+      verifyCardPayment();
     }
 
     return () => {

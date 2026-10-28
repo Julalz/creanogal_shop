@@ -137,7 +137,7 @@ async function sendAdminOrderEmail(
         ? "Pagado (SeQura)"
         : "Financiación SeQura pendiente"
       : paymentStatus === "paid"
-        ? "Pagado (Klarna / Stripe)"
+        ? "Pagado (tarjeta)"
         : "Pago pendiente de confirmar";
   const paymentReference = stripeSessionId ?? merchantOrderRef ?? sequraOrderUuid ?? null;
 
@@ -150,7 +150,7 @@ async function sendAdminOrderEmail(
     paymentStatus === "paid" ? "PEDIDO PAGADO — TIENDA QUOOKER" : "NUEVO PEDIDO — TIENDA QUOOKER",
     "",
     `Estado del pago: ${paymentLabel}`,
-    stripeSessionId ? `Referencia Stripe: ${stripeSessionId}` : null,
+    stripeSessionId ? `Referencia de pago: ${stripeSessionId}` : null,
     merchantOrderRef ? `Referencia pedido: ${merchantOrderRef}` : null,
     sequraOrderUuid ? `Referencia SeQura: ${sequraOrderUuid}` : null,
     "",

@@ -1,3 +1,4 @@
+import { COMPANY } from "@/lib/company-legal";
 import { Logo } from "./Logo";
 import { FooterFeatures } from "./FooterFeatures";
 import "./footer.css";
@@ -43,7 +44,7 @@ export function Footer() {
             <p className="footer-info__text">
               Si tienes un negocio y te gustaría{" "}
               <strong>hacer una reforma</strong> ponte en{" "}
-              <a href="mailto:creanogal@gmail.com" className="footer-info__link">
+              <a href={`mailto:${COMPANY.email}`} className="footer-info__link">
                 contacto
               </a>{" "}
               con nosotros para contarnos tu idea y recibir atención personalizada.
@@ -70,11 +71,11 @@ export function Footer() {
               <strong>lunes a viernes de 8:00h a 17:00h</strong>
             </p>
             <div className="footer-info__contact">
-              <a href="tel:+34654184933" className="footer-info__contact-link">
-                654 18 49 33
+              <a href={`tel:${COMPANY.phoneTel}`} className="footer-info__contact-link">
+                {COMPANY.phone}
               </a>
-              <a href="mailto:creanogal@gmail.com" className="footer-info__contact-link">
-                creanogal@gmail.com
+              <a href={`mailto:${COMPANY.email}`} className="footer-info__contact-link">
+                {COMPANY.email}
               </a>
             </div>
           </div>

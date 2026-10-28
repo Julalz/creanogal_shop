@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 /** Respaldo: envía emails de confirmación tras pago (p. ej. si el webhook falla en local). */
 export async function POST(request: Request) {
   if (!isStripeConfigured()) {
-    return NextResponse.json({ ok: false, error: "Stripe no configurado." }, { status: 500 });
+    return NextResponse.json({ ok: false, error: "Pago con tarjeta no configurado." }, { status: 500 });
   }
 
   let body: { sessionId?: string };

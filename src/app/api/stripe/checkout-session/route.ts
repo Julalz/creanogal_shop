@@ -14,7 +14,7 @@ type CheckoutSessionPayload = {
 export async function POST(request: Request) {
   if (!isStripeConfigured()) {
     return NextResponse.json(
-      { ok: false, error: "Stripe no está configurado. Añade STRIPE_SECRET_KEY al .env." },
+      { ok: false, error: "El pago con tarjeta no está configurado. Contacta con la tienda." },
       { status: 500 },
     );
   }

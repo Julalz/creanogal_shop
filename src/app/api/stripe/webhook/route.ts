@@ -12,7 +12,7 @@ const FULFILLMENT_EVENTS = new Set([
 
 export async function POST(request: Request) {
   if (!isStripeConfigured()) {
-    return NextResponse.json({ error: "Stripe no configurado." }, { status: 500 });
+    return NextResponse.json({ error: "Pago con tarjeta no configurado." }, { status: 500 });
   }
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;

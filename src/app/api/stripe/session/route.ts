@@ -3,7 +3,7 @@ import { getStripe, isStripeConfigured } from "@/lib/stripe";
 
 export async function GET(request: Request) {
   if (!isStripeConfigured()) {
-    return NextResponse.json({ ok: false, error: "Stripe no configurado." }, { status: 500 });
+    return NextResponse.json({ ok: false, error: "Pago con tarjeta no configurado." }, { status: 500 });
   }
 
   const sessionId = new URL(request.url).searchParams.get("session_id");

@@ -119,6 +119,9 @@ export function buildSequraOrderPayload(input: BuildPayloadInput) {
       name: "creanogal.es",
       version: "1.0",
       plugin_version: "1.0.0",
+      uname: `Node ${process.version}`,
+      db_name: "none",
+      db_version: "N/A",
     },
     gui: {
       layout: "desktop",

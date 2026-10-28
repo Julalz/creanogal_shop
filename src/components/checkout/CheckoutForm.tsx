@@ -8,7 +8,7 @@ import { useCart } from "@/hooks/useCart";
 import { SequraFormOverlay } from "./SequraFormOverlay";
 import "./checkout.css";
 
-type PaymentMethod = "sequra" | "klarna" | "card";
+type PaymentMethod = "sequra" | "card";
 type SubmittingMethod = PaymentMethod | null;
 
 type FormState = {
@@ -59,7 +59,7 @@ export function CheckoutForm() {
     };
   }
 
-  async function startStripeCheckout(paymentMethod: "klarna" | "card") {
+  async function startCardCheckout(paymentMethod: "card") {
     const formElement = formRef.current;
     if (!formElement || !formElement.reportValidity()) return;
 
@@ -177,8 +177,7 @@ export function CheckoutForm() {
           <span className="label-caps">Finalizar</span>
           <h1 className="checkout-page__title heading-serif">Checkout</h1>
           <p className="checkout-page__intro">
-            Completa tus datos y elige tu forma de pago: financiación con SeQura o Klarna, o tarjeta
-            con Stripe.
+            Completa tus datos y elige tu forma de pago: financiación con SeQura o tarjeta.
           </p>
         </header>
 
@@ -299,7 +298,7 @@ export function CheckoutForm() {
             <div className="checkout-order__payment">
               <h3 className="checkout-order__payment-title">Formas de pago</h3>
               <p className="checkout-order__payment-note">
-                Financiación con SeQura o Klarna. Tarjeta procesada con Stripe.
+                Financiación con SeQura o pago con tarjeta.
               </p>
 
               {errorMessage && (
@@ -321,15 +320,7 @@ export function CheckoutForm() {
                   type="button"
                   className="btn btn--outline-dark checkout-order__pay-btn"
                   disabled={isBusy}
-                  onClick={() => startStripeCheckout("klarna")}
-                >
-                  {submitting === "klarna" ? "Redirigiendo…" : "Financiación Klarna"}
-                </button>
-                <button
-                  type="button"
-                  className="btn btn--outline-dark checkout-order__pay-btn"
-                  disabled={isBusy}
-                  onClick={() => startStripeCheckout("card")}
+                  onClick={() => startCardCheckout("card")}
                 >
                   {submitting === "card" ? "Redirigiendo…" : "Pagar con tarjeta"}
                 </button>

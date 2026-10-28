@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { CartAddedBar } from "@/components/cart/CartAddedBar";
 import { ALL_QUOOKER_PRODUCTS } from "@/lib/quooker-catalog";
 import { readCartFromStorage, writeCartToStorage } from "@/lib/cart-storage";
 import type { CartItem, CartLine } from "@/types/cart";
@@ -44,6 +45,7 @@ function resolveLines(items: CartItem[]): CartLine[] {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isReady, setIsReady] = useState(false);
+  const [addedProductTitle, setAddedProductTitle] = useState<string | null>(null);
 
   useEffect(() => {
     setItems(readCartFromStorage());
@@ -55,8 +57,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     writeCartToStorage(items);
   }, [items, isReady]);
 
+  const dismissAddedNotice = useCallback(() => {
+    setAddedProductTitle(null);
+  }, []);
+
   const addItem = useCallback((productId: string, quantity = 1) => {
     const safeQty = Math.max(1, Math.floor(quantity));
+    const product = ALL_QUOOKER_PRODUCTS.find((p) => p.id === productId);
+    setAddedProductTitle(product?.title ?? "Producto");
     setItems((current) => {
       const existing = current.find((item) => item.productId === productId);
       if (existing) {
@@ -116,7 +124,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items, lines, itemCount, subtotal, isReady, addItem, removeItem, setQuantity, clearCart],
   );
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      <CartAddedBar
+        productTitle={addedProductTitle}
+        itemCount={itemCount}
+        onDismiss={dismissAddedNotice}
+      />
+    </CartContext.Provider>
+  );
 }
 
 export function useCartContext() {

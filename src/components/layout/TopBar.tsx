@@ -1,3 +1,4 @@
+import { COMPANY } from "@/lib/company-legal";
 import "./top-bar.css";
 
 function GlobeIcon() {
@@ -67,20 +68,20 @@ export function TopBar() {
         </p>
 
         <div className="top-bar__contact">
-          <a href="mailto:info@gruponogal.com" className="top-bar__link">
+          <a href={`mailto:${COMPANY.email}`} className="top-bar__link">
             <EmailIcon />
-            <span>info@gruponogal.com</span>
+            <span>{COMPANY.email}</span>
           </a>
-          <a href="tel:+34928123456" className="top-bar__link">
+          <a href={`tel:${COMPANY.phoneTel}`} className="top-bar__link">
             <PhoneIcon />
-            <span>928 123 456</span>
+            <span>{COMPANY.phone}</span>
           </a>
           <a
-            href="https://www.instagram.com/"
+            href={COMPANY.instagram}
             className="top-bar__social"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Instagram"
+            aria-label="Instagram de Creanogal"
           >
             <InstagramIcon />
           </a>

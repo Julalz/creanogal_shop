@@ -11,6 +11,8 @@ export const COMPANY = {
   email: "creanogal@gmail.com",
   phone: "654 18 49 33",
   phoneTel: "+34654184933",
+  whatsapp: "34654184933",
+  instagram: "https://www.instagram.com/creanogal/",
   website: "creanogal.es",
   lastUpdate: "abril de 2026",
 } as const;

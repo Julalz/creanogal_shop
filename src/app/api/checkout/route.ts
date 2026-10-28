@@ -8,7 +8,7 @@ type CheckoutPayload = {
   subtotal?: number;
 };
 
-/** Reserva de pedido sin pago online (fallback si Stripe no está activo). */
+/** Reserva de pedido sin pago online (fallback si el pago con tarjeta no está activo). */
 export async function POST(request: Request) {
   let body: CheckoutPayload;
 

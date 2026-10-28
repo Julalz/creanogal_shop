@@ -1,0 +1,105 @@
+.cart-added-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: clamp(1rem, 3vw, 1.5rem);
+  z-index: 1090;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-inline: 1rem;
+  pointer-events: none;
+}
+
+.cart-added-bar__inner {
+  position: relative;
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+  flex: 0 0 auto;
+  align-self: center;
+  pointer-events: auto;
+  padding: 0.55rem 1.75rem 0.55rem 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 0.5rem 1.25rem rgb(10 10 10 / 0.1);
+  text-align: center;
+  animation: cart-added-in 0.3s ease forwards;
+}
+
+@keyframes cart-added-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cart-added-bar__text {
+  min-width: 0;
+}
+
+.cart-added-bar__title {
+  margin: 0;
+  font-size: 0.625rem;
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.cart-added-bar__product {
+  margin: 0.15rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+.cart-added-bar__count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.cart-added-bar__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  width: 100%;
+}
+
+.cart-added-bar__inner .btn.cart-added-bar__btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  width: auto;
+  max-width: none;
+  padding: 0.45rem 0.4rem !important;
+  font-size: 0.5625rem;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+}
+
+.cart-added-bar__close {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.3rem;
+  border: none;
+  background: transparent;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0.1rem;
+}
+
+.cart-added-bar__close:hover {
+  color: var(--color-text);
+}
