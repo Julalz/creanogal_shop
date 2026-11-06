@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { COMPANY, formatFiscalAddress, formatLegalIdentity } from "@/lib/company-legal";
+import {
+  COMPANY,
+  formatDeliveryTerms,
+  formatFiscalAddress,
+  formatLegalIdentity,
+} from "@/lib/company-legal";
 import "../accesibilidad/legal.css";
 
 export const metadata: Metadata = {
@@ -34,6 +39,11 @@ export default function PoliticaDevolucionesPage() {
         </section>
 
         <section className="legal__section">
+          <h2 className="legal__heading heading-serif">Plazos de entrega</h2>
+          <p className="legal__text">{formatDeliveryTerms()}</p>
+        </section>
+
+        <section className="legal__section">
           <h2 className="legal__heading heading-serif">Derecho de desistimiento</h2>
           <p className="legal__text">
             De conformidad con el Real Decreto Legislativo 1/2007, de 16 de noviembre, por el que se
@@ -58,8 +68,8 @@ export default function PoliticaDevolucionesPage() {
           <p className="legal__text">
             En caso de devolución aceptada, el <strong>reembolso del importe del pedido se
             realizará mediante el mismo método de pago</strong> utilizado en la compra inicial
-            (tarjeta de crédito o débito, financiación con SeQura, financiación con Klarna u otro
-            medio de pago empleado en el checkout).
+            (tarjeta de crédito o débito, financiación con SeQura u otro medio de pago empleado en
+            el checkout).
           </p>
           <p className="legal__text">
             Procederemos al reembolso en un plazo máximo de <strong>14 días naturales</strong> desde

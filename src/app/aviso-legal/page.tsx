@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { COMPANY, formatFiscalAddress, formatLegalIdentity } from "@/lib/company-legal";
+import {
+  COMPANY,
+  formatDeliveryTerms,
+  formatFiscalAddress,
+  formatLegalIdentity,
+} from "@/lib/company-legal";
 import "../accesibilidad/legal.css";
 
 export const metadata: Metadata = {
@@ -26,13 +31,16 @@ export default function AvisoLegalPage() {
           </p>
           <ul className="legal__list">
             <li>
-              <strong>Razón social:</strong> {COMPANY.legalName}
+              <strong>Titular:</strong> {COMPANY.legalName}
             </li>
-            {COMPANY.taxId ? (
+            {COMPANY.dni ? (
               <li>
-                <strong>NIF/CIF:</strong> {COMPANY.taxId}
+                <strong>DNI:</strong> {COMPANY.dni}
               </li>
             ) : null}
+            <li>
+              <strong>Nombre comercial:</strong> {COMPANY.tradeName}
+            </li>
             <li>
               <strong>Domicilio fiscal:</strong> {formatFiscalAddress()}
             </li>
@@ -80,6 +88,11 @@ export default function AvisoLegalPage() {
             , donde se detallan el plazo de 14 días naturales para solicitar la devolución y el
             reembolso mediante el mismo método de pago utilizado en la compra.
           </p>
+        </section>
+
+        <section className="legal__section">
+          <h2 className="legal__heading heading-serif">Entrega de pedidos</h2>
+          <p className="legal__text">{formatDeliveryTerms()}</p>
         </section>
 
         <section className="legal__section">

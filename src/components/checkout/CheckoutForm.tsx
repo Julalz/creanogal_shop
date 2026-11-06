@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { COMPANY } from "@/lib/company-legal";
 import { formatPrice } from "@/lib/format-price";
 import { useCart } from "@/hooks/useCart";
 import { SequraFormOverlay } from "./SequraFormOverlay";
@@ -328,7 +329,8 @@ export function CheckoutForm() {
             </div>
 
             <p className="checkout-order__note">
-              IVA incluido. Envío e instalación a confirmar tras el pedido.
+              IVA incluido. Entrega e instalación en un plazo máximo de {COMPANY.deliveryMaxDays}{" "}
+              días naturales tras confirmar el pedido (ver aviso legal).
             </p>
           </aside>
         </div>
