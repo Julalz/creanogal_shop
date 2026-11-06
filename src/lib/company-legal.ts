@@ -1,7 +1,10 @@
-/** Datos legales — COMPANY_LEGAL_NAME (nombre completo del titular) y COMPANY_DNI en .env */
+/** Nombre completo del titular (texto fijo en código; no usar variables de entorno por problemas de codificación con la ñ). */
+export const OWNER_FULL_NAME = "Brayan Noguera Castaño";
+
+/** Datos legales — opcional: COMPANY_DNI en .env */
 export const COMPANY = {
   tradeName: "Creanogal",
-  legalName: process.env.COMPANY_LEGAL_NAME?.trim() || "Creanogal",
+  legalName: OWNER_FULL_NAME,
   dni: process.env.COMPANY_DNI?.trim() || "",
   fiscalAddressLine1: "Calle General Mas de Gaminde, 41",
   postalCode: "35006",
@@ -25,9 +28,9 @@ export function formatFiscalAddress() {
 
 export function formatLegalIdentity() {
   if (COMPANY.dni) {
-    return `${COMPANY.legalName}, con DNI ${COMPANY.dni}, domicilio en ${formatFiscalAddress()}`;
+    return `${OWNER_FULL_NAME}, con DNI ${COMPANY.dni}, domicilio en ${formatFiscalAddress()}`;
   }
-  return `${COMPANY.legalName}, domicilio en ${formatFiscalAddress()}`;
+  return `${OWNER_FULL_NAME}, domicilio en ${formatFiscalAddress()}`;
 }
 
 export function formatDeliveryTerms() {
